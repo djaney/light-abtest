@@ -1,4 +1,4 @@
-<div class="wrap">
+<div class="wrap" ng-app="admin" ng-controller="AdminCtrl">
 	<h2>AB Testing Admin</h2>
 
 	<h3>AB Tests</h3>
@@ -13,19 +13,23 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr>
-				<td>1</td>
-				<td>Contact us button</td>
-				<td>red and blue contact button</td>
-				<td>Red, Blue</td>
-				<td></td>
+			<tr ng-repeat="t in test.list">
+				<td>{{t.id}}</td>
+				<td>{{t.name}}</td>
+				<td>{{t.description}}</td>
+				<td>{{t.cases}}</td>
+				<td>
+					<button class="button-secondary">Edit</button>
+					<button class="button-secondary" ng-click="test.setPreview(t)">Get Code</button>
+				</td>
 			</tr>
 
 			<tr>
 				<td></td>
-				<td><input type="text" class="large-text" placeholder="New case"></td>
-				<td><input type="text" class="large-text" placeholder="Description"></td>
-				<td><button class="button-primary">Add new case</button></td>
+				<td><input type="text" class="large-text" placeholder="Name" ng-model="test.form.name"></td>
+				<td><input type="text" class="large-text" placeholder="Description" ng-model="test.form.description"></td>
+				<td><input type="text" class="large-text" placeholder="Comma separated cases" ng-model="test.form.cases"></td>
+				<td><button class="button-primary" ng-click="test.add(test.form);">Add new test</button></td>
 			</tr>
 		</tbody>
 	</table>
@@ -35,26 +39,21 @@
 
 
 	<label>
-		<input type="checkbox">
+		<input type="checkbox" ng-model="test.settings.isGaUniversal">
 		I am using the new Google Analytics universal code
 	</label>
 
-	<h3>Sample Code</h3>
-	<h4>Shortcode</h4>
-	<pre>
-[abtest test="1" case="red"]
-<?php echo htmlentities('<a href="/sample-page" onclick="abTestEvent(1,\'red\')"></a>') ?>
+	<?php add_thickbox(); ?>
+	<div id="sample-code" style="display:none;">
+		<h3 ng-show="test.preview">Sample code for "{{test.preview.name}}" AB test</h3>
 
-[/abtest]
-</pre>
-<h4>PHP</h4>
-<pre>
-<?php echo htmlentities('<?php if(abtest(1,\'red\')): ?>') ?>
+		<h4 ng-show="test.preview">Shortcode</h4>
+		<pre>{{test.getPreviewShortcode()}}</pre>
 
-<?php echo htmlentities('<a href="/sample-page" onclick="abTestEvent(1,\'red\')"></a>') ?>
+		<h4 ng-show="test.preview">PHP</h4>
+		<pre>{{test.getPreviewPHP()}}</pre>
+	</div>
 
-<?php echo htmlentities('<?php endif; ?>') ?>
-	</pre>
 		
 
 </div>

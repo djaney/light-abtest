@@ -11,7 +11,8 @@
 defined('ABSPATH') or die("No script kiddies please!");
 
 
+require "WordpressPlugin.php";
 require "LightABTest.php";
 
 
-new LightABTest();
+$instance = LightABTest::make();

@@ -1,17 +1,52 @@
 <?php
 
-class LightABTest{
+class LightABTest extends WordpressPlugin{
 
-	const PLUGIN_DIR = 'light-abtest';
+	const AJAX_PREFIX = 'abtest_';
+
+	protected $pluginName = 'Light AB Test';
+	protected $pluginVersion = '0.0.0';
+	protected $pluginDir = 'light-abtest';
+
+	protected $menus = array(
+		array(
+			'page_title'=>'AB Test Admin',
+			'menu_title'=>'AB Test Admin',
+			'page'=>'admin-menu.php',
+		),
+	);
+
+
+	protected $scripts = array(
+		array(
+			'name'=>'angularjs',
+			'path'=>'//ajax.googleapis.com/ajax/libs/angularjs/1.3.1/angular.min.js', 
+			'version'=>'1.3.1',
+			'in_public'=>false,
+		),
+		array(
+			'name'=>'light-abtest-admin',
+			'path'=>'js/admin.js', 
+			'deps'=>array('angularjs'),
+			'in_public'=>false,
+		),
+	);
+
 
 	public function __construct(){
-		add_action( 'admin_menu', array($this,'admin_menu') );
-	}
-	public function admin_menu(){
-		add_menu_page('Light AB Test Admin', 'Light AB Test', 'manage_options', self::PLUGIN_DIR.'/admin-menu.php');
+		$this->addAjax(self::AJAX_PREFIX.'save',function($instance,$params){
+			$listResult = false;
+			$settingsResult = false;
+			if($params){
+				$listResult = $instance->setOption('list',$params->list);
+				$settingsResult = $instance->setOption('settings',$params->settings);
+			}
+
+
+			return array(
+				'success'=>($listResult && $settingsResult)
+			);
+		});
 	}
 
-	private function getPluginUrl($path){
-		return plugins_url( $path, __FILE__);
-	}
 }
