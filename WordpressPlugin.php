@@ -15,6 +15,7 @@ class WordpressPlugin{
 
 	private static $instance = NULL;
 
+	private $inlineVars = array();
 
 
 	private function build(){
@@ -25,8 +26,33 @@ class WordpressPlugin{
 		add_action( 'admin_menu', array($this,'adminMenu') );
 		add_action( 'admin_enqueue_scripts', array($this,'enqueueScriptAdmin') );
 		add_action( 'wp_enqueue_scripts', array($this,'enqueueScriptPublic') );
-	}
 
+		$this->initInlineVar();
+	}
+	private function initInlineVar(){
+		$pub = '';
+		$admin = '';
+
+		$head = '<script type="text/javascript">';
+		$tail = '</script>';
+
+		foreach($this->inlineVars as $k=>$v){
+			$line = 'var '.$v['name'].' = '.json_encode($v['value']).';';
+			if($v['inPublic']) $pub.=$line;
+			if($v['inAdmin']) $admin.=$line;
+			
+		}
+
+
+		if($admin) add_action('admin_head', function() use ($admin,$head,$tail){
+			echo $head.$admin.$tail;
+		});
+
+		if($pub) add_action('wp_head', function() use ($pub,$head,$tail){
+			echo $head.$pub.$tail;
+		});
+
+	}
 
 	public function getPluginUrl($path){
 		return plugins_url( $path, self::PLUGIN_FILE);
@@ -34,18 +60,18 @@ class WordpressPlugin{
 
 
 
-	private function setPluginVersion($val){
+	public function setPluginVersion($val){
 		$this->pluginVersion = $val;
 	}
-	private function getPluginVersion(){
+	public function getPluginVersion(){
 		return $this->pluginVersion;
 	}
-	private function getPluginDirectory(){
+	public function getPluginDirectory(){
 		return $this->pluginDir;
 	}
 
 
-	private function enqueueScript($inAdmin,$inPublic){
+	public function enqueueScript($inAdmin,$inPublic){
 		foreach($this->scripts as $v){
 
 
@@ -74,6 +100,9 @@ class WordpressPlugin{
 
 		}
 		
+	}
+	public function addShortcode($name,$function){
+		add_shortcode( $name, $function );
 	}
 
 	public function xhrReturn($function){
@@ -135,7 +164,36 @@ class WordpressPlugin{
 		
 	}
 
+
+
 	public function setOption($name,$value){
-		return update_option( $this->getPluginDirectory().$name, $value );
+		delete_option($this->getPluginDirectory().$name);
+		return add_option( $this->getPluginDirectory().$name, $value );
+	}
+	public function getOption($name,$def = NULL){
+		return get_option( $this->getPluginDirectory().$name, $def );
+	}
+	public function setCookie($name , $value , $expire = 0 ,  $path = '/', $domain = NULL, $secure = false , $httponly = false){
+		return setrawcookie ( $name , json_encode($value) , $expire ,  $path , $domain, $secure , $httponly);
+	}
+	public function getCookie($name,$def=NULL){
+		if(isset($_COOKIE[$name])){
+			$cookie = stripslashes($_COOKIE[$name]);
+			if (get_magic_quotes_gpc()) {
+				$cookie = stripslashes($cookie);
+			}
+			return json_decode($cookie,true);
+		}else{
+			return $def;
+		}
+	}
+
+	public function addInlineVar($name,$value,$inAdmin = true,$inPublic = true){
+		$this->inlineVars[] = array(
+			'name'=>$name,
+			'value'=>$value,
+			'inAdmin'=>$inAdmin,
+			'inPublic'=>$inPublic,
+		);
 	}
 }
