@@ -86,11 +86,14 @@ class LightABTest extends WordpressPlugin{
 	}
 	private function randomizeCases($list){
 		$arr = array();
-		foreach($list as $row){
-			$cases  = array_map('trim', explode(',', $row->cases));
-			$arr[$row->id] = $cases[array_rand($cases)];
-			
+		if($list){
+			foreach($list as $row){
+				$cases  = array_map('trim', explode(',', $row->cases));
+				$arr[$row->id] = $cases[array_rand($cases)];
+				
+			}
 		}
+
 		return $arr;
 	}
 
