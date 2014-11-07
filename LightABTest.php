@@ -26,7 +26,7 @@ class LightABTest extends WordpressPlugin{
 	protected $scripts = array(
 		array(
 			'name'=>'angularjs',
-			'path'=>'//ajax.googleapis.com/ajax/libs/angularjs/1.3.1/angular.min.js', 
+			'path'=>'js/angular.min.js', 
 			'version'=>'1.3.1',
 			'in_public'=>false,
 		),
