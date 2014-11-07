@@ -1,4 +1,4 @@
-=== Light AB Testing ===
+=== Light AB Test ===
 Contributors: djaney
 Tags: ab testing, analytics, statistics
 Requires at least: 4.0
