@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Light AB Test
  * Plugin URI: 
- * Description: A brief description of the Plugin.
+ * Description: A simple AB Testing plugin.
  * Version: 0.0.0
  * Author: Djane Rey Mabelin
  * Author URI: codertalks.com

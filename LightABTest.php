@@ -11,7 +11,7 @@ class LightABTest extends WordpressPlugin{
 	const SHORTCODE_NAME = 'abtest';
 
 	protected $pluginName = 'Light AB Test';
-	protected $pluginVersion = '0.0.0';
+	protected $pluginVersion = '0.1.0';
 	protected $pluginDir = 'light-abtest';
 
 	protected $menus = array(
