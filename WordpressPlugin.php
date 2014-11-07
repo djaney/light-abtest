@@ -135,14 +135,14 @@ class WordpressPlugin{
 
 
 	public function addAjax($name,$function,$isAdmin = true){
-
+		$instance = $this;
 		if($isAdmin){
-			add_action( 'wp_ajax_'.$name,function() use ($function){
-				$this->xhrReturn($function);
+			add_action( 'wp_ajax_'.$name,function() use ($function,$instance){
+				$instance->xhrReturn($function);
 			});
 		}else{
-			add_action( 'wp_ajax_nopriv_'.$name,function() use ($function){
-				$this->xhrReturn($function);
+			add_action( 'wp_ajax_nopriv_'.$name,function() use ($function,$instance){
+				$instance->xhrReturn($function);
 			});
 		}
 	}

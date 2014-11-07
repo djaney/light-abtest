@@ -77,7 +77,7 @@ class LightABTest extends WordpressPlugin{
 			$test = isset($attr['test'])?$attr['test']:0;
 			$case = isset($attr['case'])?$attr['case']:'';
 
-			if(self::abtest($test,$case)){
+			if(LightABTest::abtest($test,$case)){
 				return $content;
 			}else{
 				return '';
@@ -104,9 +104,9 @@ class LightABTest extends WordpressPlugin{
 				$listResult = false;
 				$settingsResult = false;
 				if($params){
-					$listResult = $instance->setOption(self::OPT_LIST,$params->list);
-					$settingsResult = $instance->setOption(self::OPT_SETTINGS,$params->settings);
-					$lastSave = $instance->setOption(self::OPT_LAST_SAVE,time());
+					$listResult = $instance->setOption(LightABTest::OPT_LIST,$params->list);
+					$settingsResult = $instance->setOption(LightABTest::OPT_SETTINGS,$params->settings);
+					$lastSave = $instance->setOption(LightABTest::OPT_LAST_SAVE,time());
 				}
 
 
@@ -120,8 +120,8 @@ class LightABTest extends WordpressPlugin{
 				$listResult = false;
 				$settingsResult = false;
 
-				$listResult = $instance->getOption(self::OPT_LIST);
-				$settingsResult = $instance->getOption(self::OPT_SETTINGS);
+				$listResult = $instance->getOption(LightABTest::OPT_LIST);
+				$settingsResult = $instance->getOption(LightABTest::OPT_SETTINGS);
 
 		
 
